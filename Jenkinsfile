@@ -20,5 +20,18 @@ pipeline {
       }
     }
 
+    stage('Push to Docker Hub') {
+      steps {
+        script {
+          docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_creds_id') {
+            def app = docker.image("myusername/mybuildimage:${env.BUILD_NUMBER}")
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
+          }
+        }
+
+      }
+    }
+
   }
 }
